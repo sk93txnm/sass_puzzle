@@ -1,0 +1,12 @@
+@use 'variable' as v;
+
+// 3色ボックス生成（each版）
+@mixin color-boxes($width, $height) {
+  @each $name, $color in zip(v.$classNames, v.$buttonColor) {
+    &__#{$name} {
+      width: $width;
+      height: $height;
+      background-color: $color;
+    }
+  }
+}
