@@ -12,3 +12,222 @@
 }
 
 /* ↓ここに処理を書く↓ */
+
+// 親のclass名を引き継ぐパターン
+/* Sass */
+
+$maxWidth: 1000px;
+$brandColor: #cd6799;
+
+.header {
+  /* 省略 */
+
+  &__logo {
+    max-width: $maxWidth;
+  }
+}
+
+// 親 > 子パターン
+.header {
+  /* 省略 */
+
+  &__list {
+    display: flex;
+
+    & > li {
+      margin-left: 30px;
+
+      /* 擬似クラスもこのように書く事が可能 */
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+// プロパティさえ入れ子にするパターン
+
+/* Sass */
+.header {
+  /* 省略 */
+  &__list {
+    /* 省略 */
+
+    &__link {
+      text-decoration: none;
+      color: $brandColor;
+      font: {
+        size: 16px;
+        weight: bold;
+      }
+
+      &:hover {
+        color: #cd6799;
+      }
+    }
+  }
+}
+
+// section6 Mixin & Function: 関数
+
+.footer {
+  padding: 70px 0;
+
+  &__sns {
+    &__list {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      & > li {
+        width: 32%;
+
+        &:nth-child(n+4) {
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Mixinの使い方
+// 『@mixin 名前』という形で共通classを作成することができます。
+
+/* Sass */
+@mixin btn() {
+  display: block;
+  padding: 20px 30px;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #20aee5;
+  text: {
+    decoration: none;
+    align: center;
+  }
+}
+
+.footer__sns__btn {
+  @include btn(); // 『@include class名()』で呼び出し
+}
+
+/* Sass */
+@mixin btn($color) { // 引数を$colorにする
+  display: block;
+  padding: 20px 30px;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: $color; // 値に引数を設置 
+  text: {
+    decoration: none;
+    align: center;
+  }
+}
+
+.footer {
+  /* ...省略... */
+
+  &__sns {
+    /* ...省略... */
+
+    /* 以下を追記 */ 
+    &__btn {
+      &.is-facebook {
+        @include btn(#4668b3); // 引数にカラーコードを入れる
+      }
+    }
+  }
+}
+
+// section7 For & Each & Map: 繰り返し処理
+
+// For文の使い方
+/* Sass */
+@for $i from 1 through 4 {
+  .mt#{$i * 5} {
+    margin-top: #{$i * 5}px;
+  }
+}
+
+// Each文の使い方
+// 事前に代入したい値を配列で用意しておきます。
+/* Sass */
+/* Sass */
+$配列A: 値, 値, 値;
+$配列B: 値, 値, 値; // ※必ずしも配列が2つ以上ないとダメというわけではない
+
+ul {
+  & > li {
+    @each $変数A in $配列A {
+      $index_key: index($配列A, $変数A); // indexの取得
+
+      &.list_#{$変数A} {
+        a {
+          color: nth($配列B, $index_key);
+        }
+      }
+    }
+  }
+}
+
+// section8 @use:別ファイルの読み込み
+
+/* _app.scss */
+
+@use 'variable';
+
+.test {
+  color: variable.$color-text;
+}
+
+/* ...省略... */
+
+// 名前空間の命名変更
+// asをしようすることで名前空間を独自に定義することもできます。
+
+@use 'variable' as var;
+
+.test {
+  color: var.$color-text;
+}
+
+// 複数のscssファイルを一つに集約して利用する
+
+@mixin btn($color) {
+  display: block;
+  padding: 20px 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: $color;
+}
+
+/* _utils.scss */
+
+@use 'variable';
+@use 'mixins';
+
+/* style.scss */
+
+@use 'utils';
+
+.test {
+  @include utils.btn(utils.$color-text); /* ← 使用できない */
+}
+
+// @forwardを使用する
+
+/* _utils.scss */
+
+@forward 'variable';
+@forward 'mixins';
+// と記述することで参照することが可能になります。
+
+/* style.scss */
+
+@use 'utils';
+
+.test {
+  @include utils.btn(utils.$color-text); /* ← 使用できる！ */
+}
+
