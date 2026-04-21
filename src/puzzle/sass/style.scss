@@ -49,24 +49,18 @@
   height: 250px;
   background-color: v.$red;
 
+  &__content {
+    margin-top: 40px;
+    margin-left: 40px;
+  }
+
   @include m.color-boxes(140px, 40px);
 
-
-  @each $name, $color in zip(v.$classNames, v.$buttonColor) {
-    .main__#{$name} {
-      width: 140px;
-      height: 40px;
-      background-color: $color;
-      border: 5px solid v.$white;
-      margin-bottom: 10px;
-    }
-
-    &__content {
-      margin-top: 40px;
-      margin-left: 40px;
-
-
-    }
+  &__purple,
+  &__orange,
+  &__blue {
+    border: 5px solid v.$white;
+    margin-bottom: 10px;
   }
 }
 
