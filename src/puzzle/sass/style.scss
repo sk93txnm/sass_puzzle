@@ -1,6 +1,11 @@
 @use 'variable' as v;
 @use 'mixin' as m;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 .wrapper {
   max-width: v.$maxWidth;
@@ -20,7 +25,6 @@
     width: 160px;
     display: flex;
     background-color: v.$white;
-    box-sizing: border-box;
     align-items: center;
     justify-content: center;
     gap: 10px;
@@ -45,18 +49,23 @@
   height: 250px;
   background-color: v.$red;
 
-  &__content {
-    margin-top: 40px;
-    margin-left: 40px;
+  @include m.color-boxes(140px, 40px);
 
-    @each $name, $color in zip(v.$classNames, v.$buttonColor) {
-      .main__#{$name} {
-        width: 140px;
-        height: 40px;
-        background-color: $color;
-        border: 5px solid v.$white;
-        margin-bottom: 10px;
-      }
+
+  @each $name, $color in zip(v.$classNames, v.$buttonColor) {
+    .main__#{$name} {
+      width: 140px;
+      height: 40px;
+      background-color: $color;
+      border: 5px solid v.$white;
+      margin-bottom: 10px;
+    }
+
+    &__content {
+      margin-top: 40px;
+      margin-left: 40px;
+
+
     }
   }
 }
